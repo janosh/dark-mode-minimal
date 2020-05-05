@@ -1,23 +1,18 @@
-import React from 'react';
-import styled from 'styled-components';
+import React from 'react'
+import styled from 'styled-components'
+import DarkToggle from './DarkToggle'
 
-import { ThemeContext } from './ThemeContext';
+const Wrapper = styled.header`
+  display: flex;
+  justify-content: space-between;
+  padding: 1em 0;
+`
 
-import DarkToggle from './DarkToggle';
-
-const Header = ({ siteTitle }) => {
+export default function Header({ siteTitle }) {
   return (
     <Wrapper>
       {siteTitle}
       <DarkToggle />
     </Wrapper>
-  );
-};
-
-const Wrapper = styled.header`
-  display: flex;
-  justify-content: space-between;
-  padding: 16px;
-`;
-
-export default Header;
+  )
+}

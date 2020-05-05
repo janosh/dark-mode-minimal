@@ -1,7 +1,16 @@
-/**
- * Implement Gatsby's Node APIs in this file.
- *
- * See: https://www.gatsbyjs.org/docs/node-apis/
- */
+const childProcess = require(`child_process`)
 
-// You can delete this file if you're not using it
+// Works only on macOS. Should do nothing on other platforms.
+const notify = (title, text) =>
+  `osascript -e 'display notification "${text}" ` +
+  `with title "${title}" sound name "default"'`
+
+exports.onCreateDevServer = () => {
+  const cmd = notify(`Done!`, `gatsby developed finished`)
+  childProcess.exec(cmd)
+}
+
+exports.onPostBuild = () => {
+  const cmd = notify(`Done!`, `gatsby build finished`)
+  childProcess.exec(cmd)
+}

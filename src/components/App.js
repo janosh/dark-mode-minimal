@@ -1,15 +1,46 @@
-import React from 'react';
+import { graphql, useStaticQuery } from 'gatsby'
+import React from 'react'
+import { createGlobalStyle } from 'styled-components'
+import Header from './Header'
 
-import { ThemeProvider } from './ThemeContext';
-import GlobalStyles from './GlobalStyles';
+const GlobalStyles = createGlobalStyle`
+  * {
+    box-sizing: border-box;
+    font-family: Futura, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto,
+    Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
+  }
 
-function App({ children }) {
+  body {
+    background: var(--color-background);
+    color: var(--color-text);
+  }
+
+  a {
+    color: var(--color-secondary);
+  }
+
+  #gatsby-focus-wrapper {
+    margin: 0 auto;
+    max-width: 45em;
+    padding: 0 1em 1.5em;
+  }
+`
+
+export default function App({ children }) {
+  const { site } = useStaticQuery(graphql`
+    {
+      site {
+        siteMetadata {
+          title
+        }
+      }
+    }
+  `)
   return (
-    <ThemeProvider>
+    <>
       <GlobalStyles />
-      {children}
-    </ThemeProvider>
-  );
+      <Header siteTitle={site.siteMetadata.title} />
+      <main>{children}</main>
+    </>
+  )
 }
-
-export default App;

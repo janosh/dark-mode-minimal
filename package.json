@@ -1,41 +1,41 @@
 {
-  "name": "gatsby-starter-default",
+  "name": "dark-mode-minimal",
   "private": true,
-  "description": "A simple starter to get up and developing quickly with Gatsby",
+  "description": "SSR compatible, flicker-free dark mode MVP mode in Gatsby",
   "version": "0.1.0",
-  "author": "Kyle Mathews <mathews.kyle@gmail.com>",
+  "author": "Janosh Riebesell <janosh.riebesell@gmail.com>",
   "dependencies": {
     "babel-plugin-styled-components": "^1.10.7",
-    "gatsby": "^2.20.12",
-    "gatsby-plugin-styled-components": "^3.2.1",
-    "prop-types": "^15.7.2",
-    "react": "^16.12.0",
-    "react-dom": "^16.12.0",
-    "react-helmet": "^5.2.1",
+    "gatsby": "^2.21.17",
+    "gatsby-plugin-styled-components": "^3.3.1",
+    "react": "^16.13.1",
+    "react-dom": "^16.13.1",
+    "react-helmet": "^6.0.0",
+    "react-spring": "^8.0.27",
     "styled-components": "^5.1.0",
-    "terser": "^4.6.11"
+    "styled-icons": "^10.2.1"
   },
   "devDependencies": {
-    "prettier": "^1.19.1"
+    "eslint": "^6.8.0",
+    "eslint-plugin-react-hooks": "^4.0.0",
+    "prettier": "^2.0.5"
   },
   "keywords": [
-    "gatsby"
+    "gatsby",
+    "dark mode",
+    "mvp"
   ],
   "license": "MIT",
   "scripts": {
-    "build": "gatsby build",
-    "develop": "gatsby develop",
-    "format": "prettier --write \"**/*.{js,jsx,json,md}\"",
-    "start": "npm run develop",
-    "serve": "gatsby serve",
-    "clean": "gatsby clean",
-    "test": "echo \"Write tests! -> https://gatsby.dev/unit-testing\" && exit 1"
+    "dev": "gatsby develop -o -H 0.0.0.0",
+    "serve": "gatsby build && gatsby serve -o -H 0.0.0.0",
+    "clean": "gatsby clean && gatsby build && gatsby serve -o -H 0.0.0.0"
   },
   "repository": {
     "type": "git",
-    "url": "https://github.com/gatsbyjs/gatsby-starter-default"
+    "url": "https://github.com/janosh/dark-mode-minimal"
   },
   "bugs": {
-    "url": "https://github.com/gatsbyjs/gatsby/issues"
+    "url": "https://github.com/janosh/dark-mode-minimal/issues"
   }
 }
