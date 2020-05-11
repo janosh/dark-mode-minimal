@@ -1,6 +1,6 @@
 import React from 'react'
 import { useTransition } from 'react-spring'
-import { useDarkMode } from '../../hooks/useDarkMode'
+import { useDarkMode } from '../../hooks'
 import { Box, Div, Icons, Notification } from './styles'
 
 const modes = {
@@ -18,18 +18,17 @@ export default function DarkToggle(props) {
     enter: { opacity: 1, transform: `translateX(0%)` },
     leave: { opacity: 0, transform: `translateX(-100%)` },
   })
+
   return (
     <Box {...props}>
       {transitions.map(({ item, props: style, key }) => {
-        const [title, Icon, nextMode] = modes[item || `light`]
+        // Since we can't know the value of media queries or localStorage during SSR,
+        // defer any rendering of the toggle until after rehydration on the client.
+        if (![`light`, `dark`, `osPref`].includes(item)) return null
+        const [title, Icon, nextMode] = modes[item]
         return (
           <Div key={key} style={style}>
-            <Icon
-              title={title}
-              onClick={() => setColorMode(nextMode)}
-              // onTouchStart needed to react on first tap in iOS Safari.
-              onTouchStart={() => setColorMode(nextMode)}
-            />
+            <Icon title={title} onClick={() => setColorMode(nextMode)} />
             <Notification>{title}</Notification>
           </Div>
         )
