@@ -1,12 +1,24 @@
-import { useEffect, useState } from 'react'
+import { useLocalStorage, useMediaQuery } from './'
+import { useEffect, useCallback } from 'react'
 import {
   COLORS,
   COLOR_MODE_KEY,
   INITIAL_COLOR_MODE_CSS_PROP,
 } from '../constants'
 
+const setBodyColors = (mode) => {
+  for (const [name, colorByMode] of Object.entries(COLORS)) {
+    document.body.style.setProperty(`--color-${name}`, colorByMode[mode])
+  }
+}
+
 export const useDarkMode = () => {
-  const [colorMode, rawSetColorMode] = useState()
+  const [colorMode, setLSColorMode] = useLocalStorage(COLOR_MODE_KEY)
+
+  const prefersDarkFromMQ = useMediaQuery(
+    `(prefers-color-scheme: dark)`,
+    useCallback((prefDark) => setBodyColors(prefDark ? `dark` : `light`), [])
+  )
 
   // Place useDarkMode initialization in useEffect to exclude it from SSR.
   // The code inside will run on the client after React rehydration.
@@ -17,21 +29,21 @@ export const useDarkMode = () => {
     const initialColorMode = document.body.style.getPropertyValue(
       INITIAL_COLOR_MODE_CSS_PROP
     )
-    rawSetColorMode(initialColorMode)
+    setLSColorMode(initialColorMode)
+    // https://stackoverflow.com/a/61735300
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [])
 
   function setColorMode(newValue) {
-    localStorage.setItem(COLOR_MODE_KEY, newValue)
-    rawSetColorMode(newValue)
+    setLSColorMode(newValue)
 
+    // This reassignment happens after setLSColorMode because `osPref`
+    // is a valid value for persisting but not for the actual color mode.
     if (newValue === `osPref`) {
-      const mql = window.matchMedia(`(prefers-color-scheme: dark)`)
-      const prefersDarkFromMQ = mql.matches
       newValue = prefersDarkFromMQ ? `dark` : `light`
     }
 
-    for (const [name, colorByTheme] of Object.entries(COLORS))
-      document.body.style.setProperty(`--color-${name}`, colorByTheme[newValue])
+    setBodyColors(newValue)
   }
 
   return [colorMode, setColorMode]

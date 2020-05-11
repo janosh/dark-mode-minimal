@@ -7,36 +7,34 @@ import {
 } from './src/constants'
 
 function setColorsByTheme() {
-  const colors = '🌈'
-  const colorModeKey = '🔑'
-  const colorModeCssProp = '⚡️'
-  let colorMode
+  const [colors, colorModeKey, colorModeCssProp] = [`🌈`, `🔑`, `⚡️`]
+  // Default value if the user never used DarkToggle is to use the OS color mode.
+  let colorMode = `osPref`
 
-  const mql = window.matchMedia('(prefers-color-scheme: dark)')
-  const prefersDarkFromMQ = mql.matches
-
-  const persistedPreference = localStorage.getItem(colorModeKey)
-  const hasUsedToggle = typeof persistedPreference === 'string'
-
-  if (hasUsedToggle) colorMode = persistedPreference
-  else colorMode = prefersDarkFromMQ ? 'dark' : 'light'
+  const persistedPreference = localStorage[colorModeKey]
+  if ([`light`, `dark`, `osPref`].includes(persistedPreference))
+    colorMode = persistedPreference
 
   document.body.style.setProperty(colorModeCssProp, colorMode)
 
   // Here we set the actual colors for the page after SSR.
-  // colorByTheme only supports `dark` or `light`. So if colorMode
+  // colorByMode only supports `dark` or `light`. So if colorMode
   // is `osPref` we pick either of those depending on prefersDarkFromMQ.
-  if (colorMode === `osPref`) colorMode = prefersDarkFromMQ ? `dark` : `light`
+  if (colorMode === `osPref`) {
+    const mq = window.matchMedia(`(prefers-color-scheme: dark)`)
+    const prefersDarkFromMQ = mq.matches
+    colorMode = prefersDarkFromMQ ? `dark` : `light`
+  }
 
-  for (const [name, colorByTheme] of Object.entries(colors))
-    document.body.style.setProperty(`--color-${name}`, colorByTheme[colorMode])
+  for (const [name, colorByMode] of Object.entries(colors))
+    document.body.style.setProperty(`--color-${name}`, colorByMode[colorMode])
 }
 
 function RssSetColorsByTheme() {
   const boundFn = String(setColorsByTheme)
-    .replace("'🌈'", JSON.stringify(COLORS))
-    .replace('🔑', COLOR_MODE_KEY)
-    .replace('⚡️', INITIAL_COLOR_MODE_CSS_PROP)
+    .replace(`\`🌈\``, JSON.stringify(COLORS))
+    .replace(`🔑`, COLOR_MODE_KEY)
+    .replace(`⚡️`, INITIAL_COLOR_MODE_CSS_PROP)
 
   // Turn boundFn into an IIFE to make it run asap and avoid polluting global namespace.
   return <script dangerouslySetInnerHTML={{ __html: `(${boundFn})()` }} />
@@ -51,8 +49,8 @@ function FallbackStyles(cssColors = ``) {
   // Create a string holding each CSS variable:
   // `--color-text: black;\n--color-background: white;\n...`
 
-  for (const [name, colorByTheme] of Object.entries(COLORS))
-    cssColors += `--color-${name}: ${colorByTheme.light};\n`
+  for (const [name, colorByMode] of Object.entries(COLORS))
+    cssColors += `--color-${name}: ${colorByMode.light};\n`
 
   const wrappedInSelector = `html { ${cssColors} }`
 

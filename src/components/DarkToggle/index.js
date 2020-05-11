@@ -1,6 +1,6 @@
 import React from 'react'
 import { useTransition } from 'react-spring'
-import { useDarkMode } from '../../hooks/useDarkMode'
+import { useDarkMode } from '../../hooks'
 import { Box, Div, Icons, Notification } from './styles'
 
 const modes = {
