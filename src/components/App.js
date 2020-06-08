@@ -1,7 +1,8 @@
-import { graphql, useStaticQuery } from 'gatsby'
 import React from 'react'
 import { createGlobalStyle } from 'styled-components'
 import Header from './Header'
+import { MDXProvider } from '@mdx-js/react'
+import styled from 'styled-components'
 
 const GlobalStyles = createGlobalStyle`
   * {
@@ -13,6 +14,7 @@ const GlobalStyles = createGlobalStyle`
   body {
     background: var(--color-background);
     color: var(--color-text);
+    line-height: 2em;
   }
 
   a {
@@ -26,21 +28,19 @@ const GlobalStyles = createGlobalStyle`
   }
 `
 
+const components = {
+  h1: styled.h1`
+    color: var(--color-primary);
+    font-size: 2.5em;
+  `,
+}
+
 export default function App({ children }) {
-  const { site } = useStaticQuery(graphql`
-    {
-      site {
-        siteMetadata {
-          title
-        }
-      }
-    }
-  `)
   return (
-    <>
+    <MDXProvider components={components}>
       <GlobalStyles />
-      <Header siteTitle={site.siteMetadata.title} />
+      <Header />
       <main>{children}</main>
-    </>
+    </MDXProvider>
   )
 }

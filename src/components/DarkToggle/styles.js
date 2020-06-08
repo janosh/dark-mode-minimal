@@ -7,6 +7,7 @@ import { Moon, Sun } from 'styled-icons/fa-solid'
 export const Box = styled.div`
   position: relative;
   cursor: pointer;
+  width: 1em;
 `
 
 // Needed as a selector in Notification below.
