@@ -12,7 +12,7 @@ const modes = {
 export default function DarkToggle(props) {
   const [colorMode, setColorMode] = useDarkMode()
 
-  const transitions = useTransition(colorMode, null, {
+  const transition = useTransition(colorMode, {
     initial: null,
     from: { opacity: 0, transform: `translateX(100%)` },
     enter: { opacity: 1, transform: `translateX(0%)` },
@@ -21,13 +21,13 @@ export default function DarkToggle(props) {
 
   return (
     <Box {...props}>
-      {transitions.map(({ item, props: style, key }) => {
+      {transition((style, item) => {
         // Since we can't know the value of media queries or localStorage during SSR,
         // defer any rendering of the toggle until after rehydration on the client.
         if (![`light`, `dark`, `osPref`].includes(item)) return null
         const [title, Icon, nextMode] = modes[item]
         return (
-          <Div key={key} style={style}>
+          <Div key={item} style={style}>
             <Icon title={title} onClick={() => setColorMode(nextMode)} />
             <Notification>{title}</Notification>
           </Div>

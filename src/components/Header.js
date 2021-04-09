@@ -18,21 +18,23 @@ const Div = styled.header`
   }
 `
 
-export default () => (
-  <Div>
-    <DarkToggle />
-    <Link to="/">
-      <AircraftLanding size="1.7em" />
-      Landing page
-    </Link>
-    <Link to="/page-2">
-      <Pages size="1.5em" />
-      Page 2
-    </Link>
-    <a href="https://github.com/janosh/dark-mode-minimal">
-      <Github size="1.5em" css="vertical-align: -0.4em;" />
-      GitHub
-    </a>
-    <DarkToggle />
-  </Div>
-)
+export default function Header() {
+  return (
+    <Div>
+      <DarkToggle />
+      <Link to="/">
+        <AircraftLanding size="1.7em" />
+        Landing page
+      </Link>
+      <Link to="/page-2">
+        <Pages size="1.5em" />
+        Page 2
+      </Link>
+      <a href="https://github.com/janosh/dark-mode-minimal">
+        <Github size="1.5em" css="vertical-align: -0.4em;" />
+        GitHub
+      </a>
+      <DarkToggle />
+    </Div>
+  )
+}
